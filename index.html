@@ -1,1369 +1,400 @@
 <!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ArboPest — Plateforme IPM</title>
+<title>ArboPest</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
-/* ════════════════════════════════════════════
-   ARBOPEST v2 — LIVRABLE 1
-   Design System CSS + Layout B
-   Variables :root complètes
-════════════════════════════════════════════ */
 
-/* ── RESET ── */
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { font-size:16px; -webkit-text-size-adjust:100%; }
-img, svg { display:block; max-width:100%; }
-button { cursor:pointer; border:none; background:none; font:inherit; }
-a { text-decoration:none; color:inherit; }
-ul, ol { list-style:none; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-/* ── VARIABLES :root ── */
 :root {
-  /* Couleurs principales */
-  --bg:          #F5F0E8;   /* fond blanc cassé chaud */
+  --bg:          #F5F0E8;
+  --bg-2:        #EDE8DF;
+  --bg-3:        #E0DAD0;
   --surface:     #FFFFFF;
-  --surface-2:   #F0EBE0;
-  --border:      #E2D9C8;
-  --border-soft: #EDE8DE;
-
-  /* Vert ArboPest */
+  --text:        #0A0A0A;
+  --text-muted:  #6B6560;
+  --text-faint:  #B0AAA2;
   --green:       #1A3A1A;
   --green-mid:   #2D5A1B;
-  --green-light: #4A7C3F;
-  --green-pale:  #E8F0E8;
-  --green-accent:#7BC67E;
-
-  /* Accents */
+  --green-light: #E8F0E0;
+  --green-border:#B8D4B0;
   --orange:      #FF4D00;
-  --orange-pale: #FFF0E8;
+  --orange-bg:   #FFF0E8;
+  --orange-border:#FFCAB0;
   --red:         #CC0000;
-  --red-pale:    #FFE8E8;
+  --red-bg:      #FFF0F0;
+  --red-border:  #FFBBBB;
   --blue:        #4A90D9;
-  --blue-pale:   #E8F2FF;
-  --yellow:      #F5A623;
-  --yellow-pale: #FFF8E0;
-
-  /* Texte */
-  --text-primary:   #1A1A1A;
-  --text-secondary: #5A5A5A;
-  --text-muted:     #9A9A9A;
-  --text-inverse:   #FFFFFF;
-
-  /* Layout */
-  --sidebar-w:    220px;
-  --header-h:     60px;
-  --bottom-nav-h: 64px;
-  --radius-sm:    8px;
-  --radius-md:    12px;
-  --radius-lg:    16px;
-  --radius-xl:    24px;
-  --radius-pill:  999px;
-
-  /* Ombres */
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-md:  0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-lg:  0 8px 24px rgba(0,0,0,0.12), 0 4px 8px rgba(0,0,0,0.06);
-  --shadow-card:0 2px 8px rgba(26,58,26,0.08);
-
-  /* Transitions */
-  --t-fast:   150ms cubic-bezier(0.16,1,0.3,1);
-  --t-smooth: 220ms cubic-bezier(0.16,1,0.3,1);
-  --t-spring: 350ms cubic-bezier(0.34,1.56,0.64,1);
-
-  /* Typography */
-  --font-heading: 'Inter Tight', sans-serif;
-  --font-body:    'Inter', sans-serif;
-  --fz-xs:  11px;
-  --fz-sm:  13px;
-  --fz-md:  15px;
-  --fz-lg:  17px;
-  --fz-xl:  20px;
-  --fz-2xl: 24px;
-  --fz-3xl: 30px;
+  --blue-bg:     #EEF5FD;
+  --blue-border: #B8D4F0;
+  --border:      rgba(10,10,10,0.08);
+  --radius:      4px;
+  --radius-md:   8px;
+  --radius-lg:   14px;
+  --radius-xl:   20px;
+  --font-title:  'Inter Tight', sans-serif;
+  --font-body:   'Inter', sans-serif;
+  --sidebar-w:   220px;
+  --header-h:    56px;
+  --t-fast:      150ms cubic-bezier(0.16,1,0.3,1);
+  --t-smooth:    220ms cubic-bezier(0.16,1,0.3,1);
 }
 
-/* ── BASE BODY / LAYOUT B ── */
+html { font-size: 16px; }
 body {
   font-family: var(--font-body);
   background: var(--bg);
-  color: var(--text-primary);
+  color: var(--text);
   min-height: 100vh;
-  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ════════════════════════════
-   SIDEBAR (Desktop ≥ 768px)
-════════════════════════════ */
-.sidebar {
-  position: fixed;
-  top: 0; left: 0;
-  width: var(--sidebar-w);
-  height: 100vh;
-  background: var(--green);
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-  overflow: hidden;
-  transition: transform var(--t-smooth);
-}
-
-.sidebar-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 20px 18px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-}
-.sidebar-logo .logo-icon {
-  width: 36px; height: 36px;
-  background: var(--green-accent);
-  border-radius: var(--radius-md);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px;
-  flex-shrink: 0;
-}
-.sidebar-logo .logo-text { color: var(--text-inverse); }
-.sidebar-logo .logo-text strong {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: var(--fz-lg);
-  font-weight: 800;
-  letter-spacing: -0.3px;
-}
-.sidebar-logo .logo-text span {
-  font-size: var(--fz-xs);
-  color: var(--green-accent);
-  font-weight: 500;
-}
-
-.sidebar-nav {
-  flex: 1;
-  padding: 12px 10px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-.sidebar-nav::-webkit-scrollbar { width: 3px; }
-.sidebar-nav::-webkit-scrollbar-track { background: transparent; }
-.sidebar-nav::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
-
-.nav-section-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.2px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.3);
-  padding: 14px 10px 6px;
-}
-
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 12px;
-  border-radius: var(--radius-md);
-  color: rgba(255,255,255,0.65);
-  font-size: var(--fz-sm);
-  font-weight: 500;
-  transition: background var(--t-fast), color var(--t-fast), transform var(--t-fast);
-  cursor: pointer;
-  user-select: none;
-}
-.nav-item i { flex-shrink: 0; opacity: 0.7; transition: opacity var(--t-fast), transform var(--t-fast); }
-.nav-item:hover {
-  background: rgba(255,255,255,0.08);
-  color: var(--text-inverse);
-  transform: translateX(3px);
-}
-.nav-item:hover i { opacity: 1; transform: scale(1.1); }
-.nav-item.active {
-  background: rgba(123,198,126,0.18);
-  color: var(--green-accent);
-  font-weight: 600;
-}
-.nav-item.active i { opacity: 1; color: var(--green-accent); }
-
-.nav-badge {
-  margin-left: auto;
-  background: var(--orange);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: var(--radius-pill);
-  min-width: 20px;
-  text-align: center;
-}
-
-.sidebar-footer {
-  padding: 12px 10px;
-  border-top: 1px solid rgba(255,255,255,0.08);
-}
-.notion-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: var(--radius-md);
-  background: rgba(255,255,255,0.05);
-  font-size: var(--fz-xs);
-  color: rgba(255,255,255,0.5);
-}
-.notion-dot {
-  width: 7px; height: 7px;
-  border-radius: 50%;
-  background: var(--text-muted);
-  flex-shrink: 0;
-  transition: background var(--t-smooth);
-}
-.notion-dot.connected { background: var(--green-accent); box-shadow: 0 0 6px var(--green-accent); }
-.notion-dot.error { background: var(--red); }
-
-/* ════════════════════════════
-   MAIN CONTENT
-════════════════════════════ */
-.main-wrapper {
-  margin-left: var(--sidebar-w);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ── TOPBAR ── */
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  background: rgba(245,240,232,0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border-soft);
-  height: var(--header-h);
-  display: flex;
-  align-items: center;
-  padding: 0 24px;
-  gap: 16px;
-}
-.topbar-title {
-  font-family: var(--font-heading);
-  font-size: var(--fz-lg);
-  font-weight: 700;
-  color: var(--green);
-  flex: 1;
-}
-.topbar-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.weather-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  padding: 6px 14px;
-  font-size: var(--fz-sm);
-  font-weight: 600;
-  color: var(--text-primary);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow var(--t-fast);
-}
-.weather-pill:hover { box-shadow: var(--shadow-md); }
-.weather-pill .temp { color: var(--orange); font-weight: 700; }
-
-/* ── PAGE CONTENT ── */
-.page-content {
-  flex: 1;
-  padding: 24px;
-  max-width: 1280px;
-  width: 100%;
-}
-
-/* ════════════════════════════
-   CARDS — 3 types
-════════════════════════════ */
-.card {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-soft);
-  box-shadow: var(--shadow-card);
-  overflow: hidden;
-  transition: transform var(--t-smooth), box-shadow var(--t-smooth);
-}
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lg);
-}
-
-/* Card safe (normal) */
-.card-safe { border-left: 4px solid var(--green-light); }
-.card-safe .card-accent { background: var(--green-pale); color: var(--green-mid); }
-
-/* Card warn */
-.card-warn { border-left: 4px solid var(--yellow); }
-.card-warn .card-accent { background: var(--yellow-pale); color: #A0700A; }
-
-/* Card danger */
-.card-danger { border-left: 4px solid var(--red); }
-.card-danger .card-accent { background: var(--red-pale); color: var(--red); }
-
-.card-header {
-  padding: 16px 18px 12px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-}
-.card-icon {
-  width: 44px; height: 44px;
-  border-radius: var(--radius-md);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-}
-.card-meta { flex: 1; min-width: 0; }
-.card-title {
-  font-family: var(--font-heading);
-  font-size: var(--fz-md);
-  font-weight: 700;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.card-sub {
-  font-size: var(--fz-xs);
-  color: var(--text-muted);
-  margin-top: 2px;
-  font-style: italic;
-}
-.card-body { padding: 0 18px 16px; }
-
-/* ════════════════════════════
-   BADGES DE STATUT
-════════════════════════════ */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 10px;
-  border-radius: var(--radius-pill);
-  font-size: var(--fz-xs);
-  font-weight: 700;
-  letter-spacing: 0.2px;
-  white-space: nowrap;
-}
-.badge-safe    { background: var(--green-pale);   color: var(--green-mid); }
-.badge-warn    { background: var(--yellow-pale);  color: #8B6000; }
-.badge-danger  { background: var(--red-pale);     color: var(--red); }
-.badge-info    { background: var(--blue-pale);    color: #2A6AAD; }
-.badge-neutral { background: var(--surface-2);   color: var(--text-secondary); }
-.badge-orange  { background: var(--orange-pale);  color: #CC3300; }
-
-/* ════════════════════════════
-   BOUTONS — 4 couleurs hover
-════════════════════════════ */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 10px 18px;
-  border-radius: var(--radius-md);
-  font-size: var(--fz-sm);
-  font-weight: 600;
-  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast), color var(--t-fast);
-  user-select: none;
-  border: 1.5px solid transparent;
-}
-.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.btn:active { transform: translateY(0px); box-shadow: var(--shadow-sm); }
-.btn i { transition: transform var(--t-fast); }
-.btn:hover i { transform: scale(1.15); }
-
-/* btn-gps → vert */
-.btn-gps {
-  background: var(--green-pale);
-  color: var(--green-mid);
-  border-color: var(--green-light);
-}
-.btn-gps:hover { background: var(--green-mid); color: white; border-color: var(--green-mid); }
-
-/* btn-biofix → bleu */
-.btn-biofix {
-  background: var(--blue-pale);
-  color: var(--blue);
-  border-color: #A8CFEE;
-}
-.btn-biofix:hover { background: var(--blue); color: white; border-color: var(--blue); }
-
-/* btn-settings → noir */
-.btn-settings {
-  background: var(--surface-2);
-  color: var(--text-secondary);
-  border-color: var(--border);
-}
-.btn-settings:hover { background: #0A0A0A; color: white; border-color: #0A0A0A; }
-
-/* btn-alert → rouge */
-.btn-alert {
-  background: var(--red-pale);
-  color: var(--red);
-  border-color: #FFAAAA;
-}
-.btn-alert:hover { background: var(--red); color: white; border-color: var(--red); }
-
-/* btn-primary (vert plein) */
-.btn-primary {
-  background: var(--green-mid);
-  color: white;
-  border-color: var(--green-mid);
-}
-.btn-primary:hover { background: var(--green); border-color: var(--green); }
-
-/* btn-sm */
-.btn-sm { padding: 6px 12px; font-size: var(--fz-xs); }
-
-/* ════════════════════════════
-   DD PROGRESS BAR
-════════════════════════════ */
-.dd-bar-wrap { padding: 14px 18px; background: var(--surface-2); border-top: 1px solid var(--border-soft); }
-.dd-bar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: var(--fz-xs);
-  color: var(--text-muted);
-}
-.dd-bar-header strong { color: var(--text-primary); font-size: var(--fz-sm); }
-.dd-track {
-  position: relative;
-  height: 8px;
-  background: var(--border);
-  border-radius: var(--radius-pill);
-  margin-bottom: 20px;
-}
-.dd-fill {
-  height: 100%;
-  border-radius: var(--radius-pill);
-  transition: width 0.6s cubic-bezier(0.16,1,0.3,1);
-}
-.dd-fill-safe   { background: linear-gradient(90deg, var(--green-light), var(--green-accent)); }
-.dd-fill-warn   { background: linear-gradient(90deg, var(--yellow), #FFC107); }
-.dd-fill-danger { background: linear-gradient(90deg, var(--orange), var(--red)); }
-
-.dd-milestone {
-  position: absolute;
-  top: -3px;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
-}
-.dd-pin {
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  border: 2px solid white;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-.dd-label {
-  position: absolute;
-  top: 16px;
-  font-size: 9px;
-  font-weight: 700;
-  white-space: nowrap;
-  text-align: center;
-  line-height: 1.3;
-}
-
-.dd-chips { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-.dd-chip {
-  padding: 3px 9px;
-  border-radius: var(--radius-pill);
-  font-size: 11px;
-  font-weight: 600;
-  border: 1.5px solid;
+/* ── LUCIDE ── */
+[data-lucide] {
+  stroke: currentColor; stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  fill: none; flex-shrink: 0;
+  display: inline-block; vertical-align: middle;
+  width: 18px; height: 18px;
   transition: transform var(--t-fast);
 }
-.dd-chip.reached { cursor: default; }
+[data-lucide].icon-sm  { width:14px; height:14px; }
+[data-lucide].icon-md  { width:18px; height:18px; }
+[data-lucide].icon-lg  { width:22px; height:22px; }
+[data-lucide].icon-xl  { width:28px; height:28px; }
 
-/* ════════════════════════════
-   GRID SYSTEM
-════════════════════════════ */
-.grid { display: grid; gap: 18px; }
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-auto { grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); }
+/* ── LAYOUT MOBILE ── */
+.app-shell { max-width:430px; margin:0 auto; min-height:100vh; }
+.main-content { padding-bottom:80px; }
+.sidebar { display:none; }
 
-/* ── Section title ── */
-.section-title {
-  font-family: var(--font-heading);
-  font-size: var(--fz-md);
-  font-weight: 700;
-  color: var(--green);
-  margin: 24px 0 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-title::after {
-  content: '';
-  flex: 1;
-  height: 1.5px;
-  background: linear-gradient(90deg, var(--border), transparent);
-}
-
-/* ════════════════════════════
-   STAT PILLS (weather bar)
-════════════════════════════ */
-.stat-pill {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 64px;
-  padding: 6px 10px;
-}
-.stat-pill .sv {
-  font-family: var(--font-heading);
-  font-size: var(--fz-xl);
-  font-weight: 700;
-  color: white;
-  line-height: 1;
-}
-.stat-pill .sl {
-  font-size: 9px;
-  letter-spacing: 0.6px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  margin-top: 4px;
-}
-.stat-sep {
-  width: 1px;
-  height: 36px;
-  background: rgba(255,255,255,0.12);
-  align-self: center;
-}
-
-/* ────── WEATHER TOPBAR ────── */
-.weather-bar {
-  background: linear-gradient(135deg, var(--green) 0%, var(--green-mid) 100%);
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-.weather-bar .dd-value {
-  color: #FFD54F;
-  font-family: var(--font-heading);
-  font-size: var(--fz-xl);
-  font-weight: 800;
-}
-
-/* ════════════════════════════
-   MODAL SYSTEM
-════════════════════════════ */
-.modal-overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.55);
-  z-index: 999;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  backdrop-filter: blur(3px);
-}
-.modal-overlay.open { display: flex; }
-.modal-box {
-  background: var(--surface);
-  border-radius: var(--radius-xl);
-  width: 100%;
-  max-width: 840px;
-  max-height: 88vh;
-  overflow: hidden;
-  box-shadow: 0 24px 64px rgba(0,0,0,0.25);
-  display: flex;
-  flex-direction: column;
-  animation: modalIn var(--t-spring) forwards;
-}
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.94) translateY(8px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-.modal-head {
-  background: linear-gradient(135deg, var(--green), var(--green-mid));
-  padding: 18px 22px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-shrink: 0;
-}
-.modal-head-title { color: white; font-family: var(--font-heading); font-size: var(--fz-lg); font-weight: 700; }
-.modal-head-sub   { color: rgba(255,255,255,0.65); font-size: var(--fz-xs); margin-top: 3px; }
-.modal-close {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.15);
-  color: white;
-  font-size: 17px;
-  display: flex; align-items: center; justify-content: center;
-  transition: background var(--t-fast);
-  flex-shrink: 0;
-}
-.modal-close:hover { background: rgba(255,255,255,0.25); }
-.modal-body { overflow-y: auto; padding: 18px; flex: 1; }
-.modal-foot { padding: 12px 20px; background: var(--surface-2); border-top: 1px solid var(--border-soft); font-size: var(--fz-xs); color: var(--text-muted); flex-shrink: 0; }
-
-/* ── Table ONSSA ── */
-.otable { width: 100%; border-collapse: collapse; font-size: var(--fz-sm); }
-.otable th {
-  padding: 10px 12px;
-  text-align: left;
-  color: var(--text-secondary);
-  background: var(--surface-2);
-  border-bottom: 2px solid var(--border);
-  font-weight: 600;
-  font-size: var(--fz-xs);
-  letter-spacing: 0.3px;
-  text-transform: uppercase;
-}
-.otable td { padding: 9px 12px; border-bottom: 1px solid var(--border-soft); vertical-align: middle; }
-.otable tr:hover td { background: var(--surface-2); }
-
-/* ════════════════════════════
-   CULTURE SWITCHER
-════════════════════════════ */
-.culture-switch {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  background: var(--green-pale);
-  border-radius: var(--radius-lg);
-  padding: 5px;
-  margin: 0 0 20px;
-}
-.culture-btn {
-  padding: 14px 10px;
-  border-radius: var(--radius-md);
-  font-family: var(--font-heading);
-  font-size: var(--fz-md);
-  font-weight: 700;
-  color: var(--green-mid);
-  text-align: center;
-  transition: all var(--t-smooth);
-}
-.culture-btn:hover { background: rgba(45,90,27,0.10); }
-.culture-btn.active {
-  background: linear-gradient(135deg, var(--green), var(--green-mid));
-  color: white;
-  box-shadow: 0 4px 14px rgba(26,58,26,0.35);
-}
-
-/* ════════════════════════════
-   BOTTOM NAV (Mobile ≤ 767px)
-════════════════════════════ */
 .bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  height: var(--bottom-nav-h);
-  background: var(--surface);
-  border-top: 1px solid var(--border-soft);
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-  z-index: 100;
-  padding: 0 4px env(safe-area-inset-bottom);
-  display: none;
-  align-items: center;
-  justify-content: space-around;
-}
-.bnav-item {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 4px;
-  border-radius: var(--radius-md);
-  color: var(--text-muted);
-  font-size: 10px;
-  font-weight: 600;
-  transition: color var(--t-fast), background var(--t-fast);
-  user-select: none;
-}
-.bnav-item i { transition: transform var(--t-spring); }
-.bnav-item:hover { color: var(--green-mid); background: var(--green-pale); }
-.bnav-item.active {
-  color: var(--green-mid);
-}
-.bnav-item.active i { transform: scale(1.2) translateY(-2px); }
-.bnav-badge {
-  position: absolute;
-  top: 4px; right: 0;
-  background: var(--orange);
-  color: white;
-  font-size: 9px;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: var(--radius-pill);
-}
-.bnav-icon-wrap { position: relative; }
-
-/* ════════════════════════════
-   RESPONSIVE
-════════════════════════════ */
-@media (max-width: 767px) {
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .main-wrapper { margin-left: 0; padding-bottom: var(--bottom-nav-h); }
-  .bottom-nav { display: flex; }
-  .page-content { padding: 16px; }
-  .grid-2, .grid-3 { grid-template-columns: 1fr; }
-  .topbar { padding: 0 14px; }
-  .weather-bar { padding: 10px 14px; }
-  .btn-text-hide { display: none; }
-}
-@media (min-width: 768px) and (max-width: 1199px) {
-  .grid-3 { grid-template-columns: repeat(2, 1fr); }
-}
-@media (min-width: 1200px) {
-  .grid-auto { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
+  display: grid; grid-template-columns: repeat(4,1fr);
+  position: fixed; bottom:0; left:50%; transform:translateX(-50%);
+  width:100%; max-width:430px;
+  background: var(--surface); border-top:1px solid var(--border);
+  z-index:100; padding-bottom:env(safe-area-inset-bottom,0);
 }
 
-/* ── Loading Spinner ── */
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner {
-  display: inline-block;
-  width: 18px; height: 18px;
-  border: 2.5px solid rgba(255,255,255,0.3);
-  border-top-color: white;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-}
-.spinner-dark {
-  border-color: rgba(0,0,0,0.12);
-  border-top-color: var(--green-mid);
+.cards-grid { display:flex; flex-direction:column; gap:12px; padding:16px; }
+
+/* ── LAYOUT PC ── */
+@media (min-width:768px) {
+  .app-shell {
+    max-width:100%;
+    display:grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    grid-template-rows: var(--header-h) 1fr;
+    grid-template-areas: "sidebar header" "sidebar main";
+    min-height:100vh;
+  }
+  .app-header   { grid-area:header; position:sticky; top:0; z-index:100; }
+  .sidebar      { grid-area:sidebar; display:flex; flex-direction:column; background:var(--green); position:sticky; top:0; height:100vh; }
+  .main-content { grid-area:main; padding-bottom:0; }
+  .bottom-nav   { display:none; }
+  .cards-grid   { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; padding:20px; }
 }
 
-/* ── Notion sync badge ── */
-.notion-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 3px 9px;
-  border-radius: var(--radius-pill);
-  font-size: 10px;
-  font-weight: 600;
-  background: var(--surface-2);
-  color: var(--text-muted);
-  border: 1px solid var(--border);
+@media (min-width:1200px) {
+  :root { --sidebar-w:260px; }
+  .cards-grid { grid-template-columns:repeat(3,1fr); padding:24px; gap:20px; }
 }
-.notion-badge.ok   { background: var(--green-pale); color: var(--green-mid); border-color: #B8D8B8; }
-.notion-badge.err  { background: var(--red-pale);   color: var(--red);       border-color: #FFBBBB; }
-.notion-badge.sync { background: var(--blue-pale);  color: var(--blue);      border-color: #B0D4F0; }
 
-/* ── Toast notifications ── */
-#toast-zone {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  pointer-events: none;
-}
-.toast {
-  background: var(--green);
-  color: white;
-  padding: 10px 16px;
-  border-radius: var(--radius-md);
-  font-size: var(--fz-sm);
-  font-weight: 600;
-  box-shadow: var(--shadow-lg);
-  animation: toastIn 0.3s var(--t-smooth) forwards;
-  pointer-events: auto;
-  max-width: 300px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-@keyframes toastIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-.toast.warn  { background: var(--yellow); color: #3A2000; }
-.toast.error { background: var(--red); }
+/* ── TYPOGRAPHY ── */
+.t-hero  { font-family:var(--font-title); font-size:clamp(40px,10vw,64px); font-weight:900; line-height:0.92; letter-spacing:-2.5px; text-transform:uppercase; }
+.t-title { font-family:var(--font-title); font-size:clamp(20px,5vw,26px); font-weight:900; line-height:1; letter-spacing:-0.8px; text-transform:uppercase; }
+.t-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--text-muted); }
+.t-num   { font-family:var(--font-title); font-size:clamp(32px,8vw,52px); font-weight:900; letter-spacing:-2px; line-height:1; }
 
-/* ── Date picker bar ── */
-.datebar {
-  background: #163516;
-  padding: 10px 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+/* ── BADGE ── */
+.badge {
+  display:inline-flex; align-items:center; gap:4px;
+  padding:4px 10px; border-radius:999px;
+  font-size:11px; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.5px;
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+  cursor:default;
 }
-.datebar label { color: rgba(255,255,255,0.75); font-size: var(--fz-sm); font-weight: 600; }
-.datebar input[type="date"] {
-  padding: 6px 12px;
-  border: 1.5px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius-sm);
-  background: rgba(255,255,255,0.95);
-  font-size: var(--fz-sm);
-  font-family: var(--font-body);
-  cursor: pointer;
-  outline: none;
-  transition: border-color var(--t-fast);
-}
-.datebar input[type="date"]:focus { border-color: var(--green-accent); }
-.datebar-hint { color: rgba(255,255,255,0.4); font-size: 11px; margin-left: auto; }
+.badge:hover { transform:translateY(-1px); box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.badge-safe   { background:var(--green-light); color:var(--green-mid);  border:1px solid var(--green-border); }
+.badge-warn   { background:var(--orange-bg);   color:var(--orange);     border:1px solid var(--orange-border); }
+.badge-danger { background:var(--text);        color:var(--orange);     border:1px solid var(--text); }
 
-@media (max-width: 767px) {
-  .datebar { padding: 10px 14px; }
-  .datebar-hint { display: none; }
+/* ── BUTTON BASE ── */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  cursor:pointer; border:none; font-family:var(--font-body); font-weight:600;
+  border-radius:var(--radius-md);
+  transition: transform var(--t-fast), background var(--t-smooth), box-shadow var(--t-smooth), color var(--t-smooth), border-color var(--t-smooth);
+  will-change:transform;
 }
+.btn:active { transform:translateY(0px) !important; box-shadow:none !important; transition-duration:80ms; }
+.btn [data-lucide] { transition: transform var(--t-fast); }
+.btn:hover [data-lucide] { transform: scale(1.15); }
+
+/* GPS — vert */
+.btn-primary { background:var(--green); color:#fff; padding:12px 20px; font-size:14px; }
+.btn-primary:hover { transform:translateY(-2px); background:var(--green-mid); box-shadow:0 4px 16px rgba(26,58,26,0.35); }
+
+/* Biofix — bleu */
+.btn-secondary { background:var(--surface); color:var(--text); border:1px solid var(--border); padding:10px 16px; font-size:13px; }
+.btn-secondary:hover { transform:translateY(-2px); background:var(--blue); color:#fff; border-color:var(--blue); box-shadow:0 4px 16px rgba(74,144,217,0.35); }
+
+/* Réglages — noir */
+.btn-ghost { background:transparent; color:var(--text-muted); padding:8px 12px; font-size:13px; border:1px solid transparent; }
+.btn-ghost:hover { transform:translateY(-2px); background:var(--text); color:#fff; box-shadow:0 4px 16px rgba(0,0,0,0.25); }
+
+/* Alerte — rouge */
+.btn-danger { background:var(--red-bg); color:var(--red); border:1px solid var(--red-border); padding:10px 16px; font-size:13px; }
+.btn-danger:hover { transform:translateY(-2px); background:var(--red); color:#fff; border-color:var(--red); box-shadow:0 4px 16px rgba(204,0,0,0.35); }
+
+/* ── CARD ── */
+.card {
+  background:var(--surface); border-radius:var(--radius-lg);
+  border:1px solid var(--border); overflow:hidden; cursor:pointer;
+  transition: transform var(--t-smooth), box-shadow var(--t-smooth);
+  will-change:transform;
+}
+.card:hover  { transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,0.10); }
+.card:active { transform:translateY(-1px); box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+
+/* ── SIDEBAR ITEM ── */
+.sidebar-item {
+  padding:10px 12px; border-radius:var(--radius-md);
+  color:rgba(255,255,255,0.45); font-size:14px;
+  cursor:pointer; display:flex; align-items:center; gap:10px;
+  transition: background var(--t-smooth), color var(--t-smooth);
+}
+.sidebar-item:hover { background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.85); }
+.sidebar-item:hover [data-lucide] { transform:scale(1.12); }
+.sidebar-item.active { background:rgba(255,255,255,0.12); color:#fff; }
+.sidebar-item.active [data-lucide] { stroke:#7BC67E; }
+
+/* ── NAV ITEM ── */
+.nav-item {
+  border:none; background:none; padding:10px 0; cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:4px;
+  color:var(--text-faint); font-family:var(--font-body);
+  transition: color var(--t-smooth);
+}
+.nav-item:hover { color:var(--green-mid); }
+.nav-item:hover [data-lucide] { transform:scale(1.15) translateY(-1px); }
+.nav-item.active { color:var(--green-mid); }
+
+/* ── ICON ITEM ── */
+.icon-item {
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding:12px 8px; background:var(--surface); border-radius:var(--radius-md);
+  border:1px solid var(--border); cursor:default;
+  transition: transform var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+}
+.icon-item:hover { transform:translateY(-2px); box-shadow:0 4px 12px rgba(0,0,0,0.08); background:var(--bg-2); }
+.icon-item:hover [data-lucide] { transform:scale(1.2); }
+.icon-item-label { font-size:9px; color:var(--text-faint); text-align:center; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+
+/* ── UTILS ── */
+.divider { height:1px; background:var(--border); }
+.btn-row { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.icon-showcase { display:grid; grid-template-columns:repeat(auto-fill,minmax(78px,1fr)); gap:10px; }
+
+/* ── PROOF ── */
+.proof { padding:24px 20px; max-width:700px; }
+.proof-section { margin-bottom:32px; }
+.section-label {
+  font-size:10px; font-weight:700; text-transform:uppercase;
+  letter-spacing:2px; color:var(--text-faint);
+  margin-bottom:16px; padding-bottom:8px;
+  border-bottom:1px solid var(--border);
+}
+.swatch {
+  padding:16px 20px; border-radius:var(--radius-lg);
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:8px;
+}
+
 </style>
 </head>
 <body>
+<div class="app-shell">
 
-<!-- ── TOAST ZONE ── -->
-<div id="toast-zone"></div>
+  <!-- SIDEBAR PC -->
+  <aside class="sidebar">
+    <div style="padding:24px 20px;border-bottom:1px solid rgba(255,255,255,0.08)">
+      <div style="font-family:var(--font-title);font-size:20px;font-weight:900;color:#fff;letter-spacing:-0.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px">
+        <i data-lucide="leaf" style="width:20px;height:20px;stroke:#7BC67E"></i>
+        Arbo<span style="color:#7BC67E">Pest</span>
+      </div>
+      <div style="font-size:10px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:6px">IPM Maroc</div>
+    </div>
+    <div style="padding:20px 12px;flex:1;display:flex;flex-direction:column;gap:4px">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:rgba(255,255,255,0.25);padding:0 8px;margin-bottom:4px">Menu</div>
+      <div class="sidebar-item active"><i data-lucide="bug" class="icon-md"></i> Ravageurs</div>
+      <div class="sidebar-item"><i data-lucide="flask-conical" class="icon-md"></i> Produits</div>
+      <div class="sidebar-item"><i data-lucide="share-2" class="icon-md"></i> Partager</div>
+      <div class="sidebar-item"><i data-lucide="settings" class="icon-md"></i> Réglages</div>
+    </div>
+    <div style="padding:16px 20px;border-top:1px solid rgba(255,255,255,0.08)">
+      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.4);font-size:12px;font-weight:600">
+        <i data-lucide="map-pin" style="width:13px;height:13px"></i> Beni Mellal
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;color:rgba(255,255,255,0.2);font-size:11px;margin-top:4px">
+        <i data-lucide="cloud" style="width:12px;height:12px"></i> Open-Meteo · Gratuit
+      </div>
+    </div>
+  </aside>
 
-<!-- ════════════════════════════
-     SIDEBAR
-════════════════════════════ -->
-<aside class="sidebar" id="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-icon">🌿</div>
-    <div class="logo-text">
-      <strong>ArboPest</strong>
-      <span>Plateforme IPM</span>
-    </div>
-  </div>
+  <!-- MAIN -->
+  <main class="main-content">
+    <div class="proof">
 
-  <nav class="sidebar-nav">
-    <div class="nav-section-label">Principal</div>
-    <div class="nav-item active" onclick="setPage('dashboard')">
-      <i data-lucide="layout-dashboard"></i> Dashboard
-    </div>
-    <div class="nav-item" onclick="setPage('ravageurs')">
-      <i data-lucide="bug"></i> Ravageurs
-      <span class="nav-badge" id="nb-alerts">0</span>
-    </div>
-    <div class="nav-item" onclick="setPage('meteo')">
-      <i data-lucide="cloud-sun"></i> Météo & DD
-    </div>
+      <!-- 01 TYPO -->
+      <div class="proof-section">
+        <div class="section-label">01 — Typographie</div>
+        <div class="t-hero" style="color:var(--green)">ACARIENS</div>
+        <div class="t-hero" style="color:var(--orange);margin-top:4px">G2 ACTIF</div>
+        <div style="margin-top:16px;display:flex;align-items:baseline;gap:10px">
+          <div class="t-num" style="color:var(--orange)">847</div>
+          <div class="t-label">DD cumulés · base 8.3°C</div>
+        </div>
+        <div style="margin-top:8px;display:flex;align-items:baseline;gap:10px">
+          <div class="t-num" style="color:var(--green-mid)">36.2°</div>
+          <div class="t-label">T° Max · Beni Mellal</div>
+        </div>
+      </div>
 
-    <div class="nav-section-label">Outils</div>
-    <div class="nav-item" onclick="setPage('produits')">
-      <i data-lucide="flask-conical"></i> Produits ONSSA
-    </div>
-    <div class="nav-item" onclick="setPage('biocontrol')">
-      <i data-lucide="leaf"></i> Biocontrôle
-    </div>
-    <div class="nav-item" onclick="setPage('alertes')">
-      <i data-lucide="bell"></i> Alertes Email
-    </div>
+      <div class="divider"></div>
 
-    <div class="nav-section-label">Données</div>
-    <div class="nav-item" onclick="setPage('notion')">
-      <i data-lucide="database"></i> Bases Notion
+      <!-- 02 BOUTONS -->
+      <div class="proof-section" style="margin-top:28px">
+        <div class="section-label">02 — Boutons (hover pour animation)</div>
+        <div class="btn-row">
+          <button class="btn btn-primary">
+            <i data-lucide="map-pin" class="icon-sm"></i> Localisation GPS
+          </button>
+          <button class="btn btn-secondary">
+            <i data-lucide="calendar" class="icon-sm"></i> Modifier Biofix
+          </button>
+          <button class="btn btn-ghost">
+            <i data-lucide="settings" class="icon-sm"></i> Réglages
+          </button>
+          <button class="btn btn-danger">
+            <i data-lucide="alert-triangle" class="icon-sm"></i> Alerte active
+          </button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 03 STATUTS -->
+      <div class="proof-section" style="margin-top:28px">
+        <div class="section-label">03 — Statuts ravageurs</div>
+        <div class="swatch" style="background:var(--green-light);border:1.5px solid var(--green-border)">
+          <div>
+            <div class="t-title" style="color:var(--green);font-size:18px">SURVEILLER</div>
+            <div style="font-size:12px;color:var(--green-mid);margin-top:4px">DD insuffisants · aucune action</div>
+          </div>
+          <span class="badge badge-safe">✓ Safe</span>
+        </div>
+        <div class="swatch" style="background:var(--orange-bg);border:1.5px solid var(--orange-border)">
+          <div>
+            <div class="t-title" style="color:var(--orange);font-size:18px">G1 ACTIF</div>
+            <div style="font-size:12px;color:var(--orange);margin-top:4px">Seuil atteint · intervention recommandée</div>
+          </div>
+          <span class="badge badge-warn">⚠ Alerte</span>
+        </div>
+        <div class="swatch" style="background:var(--text);border:1.5px solid var(--text)">
+          <div>
+            <div class="t-title" style="color:var(--orange);font-size:18px">G2 ACTIF</div>
+            <div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px">Intervention urgente requise</div>
+          </div>
+          <span class="badge badge-danger">● Urgent</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 04 CARDS -->
+      <div class="proof-section" style="margin-top:28px">
+        <div class="section-label">04 — Cards (hover pour le lift)</div>
+        <div class="cards-grid" style="padding:0">
+          <div class="card" style="padding:20px;border-left:4px solid var(--green-mid)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <i data-lucide="bug" class="icon-lg" style="color:var(--green-mid)"></i>
+              <span class="t-title" style="font-size:16px;color:var(--green)">ACARIENS</span>
+            </div>
+            <span class="badge badge-safe">✓ Surveiller</span>
+          </div>
+          <div class="card" style="padding:20px;border-left:4px solid var(--orange)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <i data-lucide="bug" class="icon-lg" style="color:var(--orange)"></i>
+              <span class="t-title" style="font-size:16px;color:var(--orange)">THRIPS</span>
+            </div>
+            <span class="badge badge-warn">⚠ G1 Actif</span>
+          </div>
+          <div class="card" style="padding:20px;background:var(--text);border-left:4px solid var(--orange)">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <i data-lucide="bug" class="icon-lg" style="color:var(--orange)"></i>
+              <span class="t-title" style="font-size:16px;color:var(--orange)">CERATITIS</span>
+            </div>
+            <span class="badge badge-danger">● G2 Urgent</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- 05 ICONES -->
+      <div class="proof-section" style="margin-top:28px">
+        <div class="section-label">05 — Icônes Lucide (hover)</div>
+        <div class="icon-showcase">
+          <div class="icon-item"><i data-lucide="thermometer" class="icon-lg" style="color:var(--orange)"></i><span class="icon-item-label">Temp</span></div>
+          <div class="icon-item"><i data-lucide="droplets" class="icon-lg" style="color:var(--blue)"></i><span class="icon-item-label">Humidité</span></div>
+          <div class="icon-item"><i data-lucide="cloud-rain" class="icon-lg" style="color:var(--blue)"></i><span class="icon-item-label">Pluie</span></div>
+          <div class="icon-item"><i data-lucide="wind" class="icon-lg" style="color:var(--text-muted)"></i><span class="icon-item-label">Vent</span></div>
+          <div class="icon-item"><i data-lucide="sun" class="icon-lg" style="color:#F5A623"></i><span class="icon-item-label">Soleil</span></div>
+          <div class="icon-item"><i data-lucide="map-pin" class="icon-lg" style="color:var(--red)"></i><span class="icon-item-label">Région</span></div>
+          <div class="icon-item"><i data-lucide="bug" class="icon-lg" style="color:var(--green-mid)"></i><span class="icon-item-label">Ravageur</span></div>
+          <div class="icon-item"><i data-lucide="leaf" class="icon-lg" style="color:var(--green-mid)"></i><span class="icon-item-label">Culture</span></div>
+          <div class="icon-item"><i data-lucide="flask-conical" class="icon-lg" style="color:#7B68EE"></i><span class="icon-item-label">Produit</span></div>
+          <div class="icon-item"><i data-lucide="alert-triangle" class="icon-lg" style="color:var(--orange)"></i><span class="icon-item-label">Alerte</span></div>
+          <div class="icon-item"><i data-lucide="calendar" class="icon-lg" style="color:var(--text-muted)"></i><span class="icon-item-label">Biofix</span></div>
+          <div class="icon-item"><i data-lucide="share-2" class="icon-lg" style="color:var(--text-muted)"></i><span class="icon-item-label">Partager</span></div>
+          <div class="icon-item"><i data-lucide="activity" class="icon-lg" style="color:var(--green-mid)"></i><span class="icon-item-label">DD</span></div>
+          <div class="icon-item"><i data-lucide="shield-check" class="icon-lg" style="color:var(--green-mid)"></i><span class="icon-item-label">ONSSA</span></div>
+          <div class="icon-item"><i data-lucide="sprout" class="icon-lg" style="color:var(--green-mid)"></i><span class="icon-item-label">Biocontrôle</span></div>
+          <div class="icon-item"><i data-lucide="bell" class="icon-lg" style="color:var(--orange)"></i><span class="icon-item-label">Alertes</span></div>
+        </div>
+      </div>
+
     </div>
-    <div class="nav-item" onclick="setPage('settings')">
-      <i data-lucide="settings"></i> Réglages
-    </div>
+  </main>
+
+  <!-- BOTTOM NAV mobile -->
+  <nav class="bottom-nav">
+    <button class="nav-item active">
+      <i data-lucide="bug" class="icon-lg"></i>
+      <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">Ravageurs</span>
+    </button>
+    <button class="nav-item">
+      <i data-lucide="flask-conical" class="icon-lg"></i>
+      <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">Produits</span>
+    </button>
+    <button class="nav-item">
+      <i data-lucide="share-2" class="icon-lg"></i>
+      <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">Partager</span>
+    </button>
+    <button class="nav-item">
+      <i data-lucide="settings" class="icon-lg"></i>
+      <span style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px">Réglages</span>
+    </button>
   </nav>
 
-  <div class="sidebar-footer">
-    <div class="notion-status">
-      <div class="notion-dot" id="notion-dot"></div>
-      <span id="notion-status-text">Notion : connexion…</span>
-    </div>
-  </div>
-</aside>
-
-<!-- ════════════════════════════
-     MAIN WRAPPER
-════════════════════════════ -->
-<div class="main-wrapper">
-
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <button class="btn btn-sm" id="menu-toggle" onclick="toggleSidebar()" style="padding:6px;">
-      <i data-lucide="menu"></i>
-    </button>
-    <h1 class="topbar-title">🌿 ArboPest — <span id="page-label">Dashboard</span></h1>
-    <div class="topbar-meta">
-      <div class="weather-pill" id="topbar-weather">
-        <i data-lucide="thermometer" style="width:14px;height:14px;"></i>
-        <span class="temp" id="tp-tmax"><span class="spinner-dark spinner" style="width:14px;height:14px"></span></span>
-        <span style="color:var(--text-muted)">|</span>
-        <span id="tp-dd" style="color:var(--blue);font-weight:700;">—</span><span style="font-size:11px;color:var(--text-muted)"> DD</span>
-      </div>
-      <div class="notion-badge" id="notion-topbadge">🔄 Notion</div>
-    </div>
-  </header>
-
-  <!-- WEATHER BAR -->
-  <div class="weather-bar" id="weather-bar">
-    <div class="stat-pill"><div class="sv" id="w-tmax"><span class="spinner"></span></div><div class="sl">T° Max</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-pill"><div class="sv" id="w-tmin">—</div><div class="sl">T° Min</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-pill"><div class="sv" id="w-tmoy">—</div><div class="sl">T° Moy</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-pill"><div class="sv" id="w-hr">—</div><div class="sl">HR %</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-pill"><div class="sv" id="w-pluie">—</div><div class="sl">Pluie mm</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-pill"><div class="sv" id="w-ddj">—</div><div class="sl">DD/jour</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-pill"><div class="sv dd-value" id="w-ddc">—</div><div class="sl">DD Cumulés</div></div>
-    <div class="stat-sep"></div>
-    <div class="stat-pill"><div class="sv" id="w-jours">—</div><div class="sl">J. Biofix (<span id="biofix-lbl">01/03</span>)</div></div>
-    <div style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.35)" id="w-source">Open-Meteo</div>
-  </div>
-
-  <!-- DATE BAR -->
-  <div class="datebar">
-    <label for="datePicker">📅 Date :</label>
-    <input type="date" id="datePicker">
-    <div class="culture-switch" style="margin:0;width:auto;min-width:260px;">
-      <button class="culture-btn active" id="btn-agrumes" onclick="switchCulture('agrumes')">🍊 Agrumes</button>
-      <button class="culture-btn" id="btn-grenadier" onclick="switchCulture('grenadier')">🔴 Grenadier</button>
-    </div>
-    <button class="btn btn-primary btn-sm" onclick="loadWeather()">
-      <i data-lucide="refresh-cw" style="width:13px;height:13px"></i>
-      <span class="btn-text-hide">Actualiser</span>
-    </button>
-    <span class="datebar-hint">DD cumulés depuis Biofix · Base 10°C</span>
-  </div>
-
-  <!-- PAGE CONTENT -->
-  <div class="page-content">
-
-    <!-- DESIGN SYSTEM PREVIEW (Livrable 1) -->
-    <div id="page-dashboard">
-
-      <p class="section-title"><i data-lucide="palette" style="width:16px;height:16px"></i> Design System — Livrable 1</p>
-
-      <!-- Badges -->
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px">
-        <span class="badge badge-safe">✅ Sécurisé</span>
-        <span class="badge badge-warn">⚠️ Surveillance</span>
-        <span class="badge badge-danger">🔴 Intervention</span>
-        <span class="badge badge-info">📊 Information</span>
-        <span class="badge badge-neutral">— Inactif</span>
-        <span class="badge badge-orange">🦟 Alerte vol</span>
-      </div>
-
-      <!-- Buttons -->
-      <p class="section-title"><i data-lucide="mouse-pointer-2" style="width:16px;height:16px"></i> Boutons — 4 hover colors</p>
-      <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px">
-        <button class="btn btn-gps"><i data-lucide="map-pin" style="width:15px;height:15px"></i> GPS Localisation</button>
-        <button class="btn btn-biofix"><i data-lucide="calendar-check" style="width:15px;height:15px"></i> Biofix</button>
-        <button class="btn btn-settings"><i data-lucide="settings" style="width:15px;height:15px"></i> Réglages</button>
-        <button class="btn btn-alert"><i data-lucide="bell-ring" style="width:15px;height:15px"></i> Alertes</button>
-        <button class="btn btn-primary"><i data-lucide="refresh-cw" style="width:15px;height:15px"></i> Actualiser</button>
-      </div>
-
-      <!-- Cards -->
-      <p class="section-title"><i data-lucide="layers" style="width:16px;height:16px"></i> Cards — 3 niveaux de risque</p>
-      <div class="grid grid-auto" style="margin-bottom:24px">
-
-        <!-- Card safe -->
-        <div class="card card-safe">
-          <div class="card-header">
-            <div class="card-icon card-accent" style="background:var(--green-pale)">🕷️</div>
-            <div class="card-meta">
-              <div class="card-title">Acariens</div>
-              <div class="card-sub">Panonychus citri</div>
-            </div>
-            <span class="badge badge-safe">✅ Faible risque</span>
-          </div>
-          <div class="card-body">
-            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border-soft);font-size:var(--fz-sm)">
-              <span style="color:var(--text-muted)">Culture</span><span style="font-weight:600">Agrumes</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:var(--fz-sm)">
-              <span style="color:var(--text-muted)">Seuil</span><span style="font-weight:600">5 acarians/feuille</span>
-            </div>
-          </div>
-          <div class="dd-bar-wrap">
-            <div class="dd-bar-header"><span>Progression DD</span><strong id="safe-dd-val">— DD</strong></div>
-            <div class="dd-track">
-              <div class="dd-fill dd-fill-safe" id="safe-dd-fill" style="width:0%"></div>
-              <div class="dd-milestone" style="left:33.3%"><div class="dd-pin" style="background:var(--green-light)"></div><div class="dd-label" style="color:var(--green-light)">G1<br>562</div></div>
-              <div class="dd-milestone" style="left:66.6%"><div class="dd-pin" style="background:var(--yellow)"></div><div class="dd-label" style="color:#8B6000">G2<br>1124</div></div>
-              <div class="dd-milestone" style="left:99%"><div class="dd-pin" style="background:var(--red)"></div><div class="dd-label" style="color:var(--red)">G3<br>1686</div></div>
-            </div>
-            <div class="dd-chips" id="safe-dd-chips"></div>
-          </div>
-        </div>
-
-        <!-- Card warn -->
-        <div class="card card-warn">
-          <div class="card-header">
-            <div class="card-icon" style="background:var(--yellow-pale)">🦗</div>
-            <div class="card-meta">
-              <div class="card-title">Thrips</div>
-              <div class="card-sub">Scirtothrips citri</div>
-            </div>
-            <span class="badge badge-warn">⚠️ G1 Actif</span>
-          </div>
-          <div class="card-body">
-            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border-soft);font-size:var(--fz-sm)">
-              <span style="color:var(--text-muted)">Culture</span><span style="font-weight:600">Agrumes</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:var(--fz-sm)">
-              <span style="color:var(--text-muted)">Seuil</span><span style="font-weight:600">1 thrips/fleur</span>
-            </div>
-          </div>
-          <div class="dd-bar-wrap">
-            <div class="dd-bar-header"><span>Progression DD</span><strong id="warn-dd-val">— DD</strong></div>
-            <div class="dd-track">
-              <div class="dd-fill dd-fill-warn" id="warn-dd-fill" style="width:0%"></div>
-              <div class="dd-milestone" style="left:33%"><div class="dd-pin" style="background:var(--yellow)"></div><div class="dd-label" style="color:#8B6000">G1<br>125</div></div>
-              <div class="dd-milestone" style="left:66%"><div class="dd-pin" style="background:var(--orange)"></div><div class="dd-label" style="color:var(--orange)">G2<br>250</div></div>
-              <div class="dd-milestone" style="left:99%"><div class="dd-pin" style="background:var(--red)"></div><div class="dd-label" style="color:var(--red)">G3<br>375</div></div>
-            </div>
-            <div class="dd-chips" id="warn-dd-chips"></div>
-          </div>
-        </div>
-
-        <!-- Card danger -->
-        <div class="card card-danger">
-          <div class="card-header">
-            <div class="card-icon" style="background:var(--red-pale)">🦟</div>
-            <div class="card-meta">
-              <div class="card-title">Mouche des fruits</div>
-              <div class="card-sub">Ceratitis capitata</div>
-            </div>
-            <span class="badge badge-danger">🔴 Intervention</span>
-          </div>
-          <div class="card-body">
-            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--border-soft);font-size:var(--fz-sm)">
-              <span style="color:var(--text-muted)">Culture</span><span style="font-weight:600">Agrumes</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:var(--fz-sm)">
-              <span style="color:var(--text-muted)">Seuil</span><span style="font-weight:600">1 mouche/piège/jour</span>
-            </div>
-          </div>
-          <div class="dd-bar-wrap">
-            <div class="dd-bar-header"><span>Progression DD</span><strong id="danger-dd-val">— DD</strong></div>
-            <div class="dd-track">
-              <div class="dd-fill dd-fill-danger" id="danger-dd-fill" style="width:0%"></div>
-              <div class="dd-milestone" style="left:33%"><div class="dd-pin" style="background:var(--orange)"></div><div class="dd-label" style="color:var(--orange)">G1<br>373</div></div>
-              <div class="dd-milestone" style="left:66%"><div class="dd-pin" style="background:var(--red)"></div><div class="dd-label" style="color:var(--red)">G2<br>746</div></div>
-              <div class="dd-milestone" style="left:99%"><div class="dd-pin" style="background:var(--red)"></div><div class="dd-label" style="color:var(--red)">G3<br>1119</div></div>
-            </div>
-            <div class="dd-chips" id="danger-dd-chips"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Notion connected data -->
-      <p class="section-title"><i data-lucide="database" style="width:16px;height:16px"></i> Données Notion — Cultures & Ravageurs</p>
-      <div id="notion-cultures-grid" class="grid grid-auto">
-        <div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-muted);font-size:var(--fz-sm)">
-          <span class="spinner-dark spinner"></span>&nbsp; Chargement depuis Notion…
-        </div>
-      </div>
-
-    </div><!-- /page-dashboard -->
-
-  </div><!-- /page-content -->
-
-</div><!-- /main-wrapper -->
-
-<!-- ── BOTTOM NAV (Mobile) ── -->
-<nav class="bottom-nav">
-  <div class="bnav-item active" onclick="setPage('dashboard')">
-    <div class="bnav-icon-wrap"><i data-lucide="layout-dashboard" style="width:22px;height:22px"></i></div>
-    <span>Dashboard</span>
-  </div>
-  <div class="bnav-item" onclick="setPage('ravageurs')">
-    <div class="bnav-icon-wrap">
-      <i data-lucide="bug" style="width:22px;height:22px"></i>
-      <span class="bnav-badge" id="bnav-badge">0</span>
-    </div>
-    <span>Ravageurs</span>
-  </div>
-  <div class="bnav-item" onclick="setPage('meteo')">
-    <div class="bnav-icon-wrap"><i data-lucide="cloud-sun" style="width:22px;height:22px"></i></div>
-    <span>Météo</span>
-  </div>
-  <div class="bnav-item" onclick="setPage('produits')">
-    <div class="bnav-icon-wrap"><i data-lucide="flask-conical" style="width:22px;height:22px"></i></div>
-    <span>ONSSA</span>
-  </div>
-  <div class="bnav-item" onclick="setPage('notion')">
-    <div class="bnav-icon-wrap"><i data-lucide="database" style="width:22px;height:22px"></i></div>
-    <span>Notion</span>
-  </div>
-</nav>
-
-<!-- ════════════════════════════
-     JAVASCRIPT
-════════════════════════════ -->
-<script>
-
-// ── CONFIG NOTION (remplacer par vos vraies valeurs) ──
-const NOTION_CONFIG = {
-  // ⚠️  Ne pas exposer la clé secrète côté client en production.
-  //      Utiliser un proxy CORS ou une fonction serverless.
-  apiBase:  'https://notion-proxy.vercel.app/api',  // proxy CORS recommandé
-  // Bases de données Notion (IDs à remplir après création)
-  db: {
-    cultures:  '',   // 🌳 Cultures
-    ravageurs: '',   // 🦟 Ravageurs
-    meteo:     '',   // 🌡️ Météo Log
-    produits:  '',   // 💊 Produits ONSSA
-    alertes:   ''    // 📧 Config Alertes
-  }
-};
-
-// ── GEO & BIOFIX ──
-const LAT = 32.45, LON = -6.78;
-const CUR_YEAR = new Date().getFullYear();
-const BIOFIX = { agrumes: `${CUR_YEAR}-03-01`, grenadier: `${CUR_YEAR}-03-15` };
-let currentCulture = 'agrumes';
-let ddCumul = 0;
-
-// ── LUCIDE ICONS init ──
-lucide.createIcons();
-
-// ── PAGE ROUTER ──
-function setPage(name) {
-  document.getElementById('page-label').textContent = {
-    dashboard:'Dashboard', ravageurs:'Ravageurs', meteo:'Météo & DD',
-    produits:'Produits ONSSA', biocontrol:'Biocontrôle',
-    alertes:'Alertes Email', notion:'Bases Notion', settings:'Réglages'
-  }[name] || name;
-  // future: show/hide page sections
-  // update nav active
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.bnav-item').forEach(el => el.classList.remove('active'));
-  const found = [...document.querySelectorAll('.nav-item')].find(el => el.getAttribute('onclick')?.includes(`'${name}'`));
-  if (found) found.classList.add('active');
-}
-
-// ── SIDEBAR TOGGLE (mobile) ──
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-// ── CULTURE SWITCH ──
-function switchCulture(c) {
-  currentCulture = c;
-  document.getElementById('btn-agrumes').classList.toggle('active', c === 'agrumes');
-  document.getElementById('btn-grenadier').classList.toggle('active', c === 'grenadier');
-  document.getElementById('biofix-lbl').textContent = c === 'grenadier' ? '15/03' : '01/03';
-  loadWeather();
-}
-
-// ── TOAST ──
-function toast(msg, type = '') {
-  const z = document.getElementById('toast-zone');
-  const t = document.createElement('div');
-  t.className = `toast ${type}`;
-  t.innerHTML = `<i data-lucide="info" style="width:14px;height:14px"></i> ${msg}`;
-  z.appendChild(t);
-  lucide.createIcons();
-  setTimeout(() => t.remove(), 3200);
-}
-
-// ── WEATHER (Open-Meteo Archive) ──
-async function loadWeather() {
-  const selDate = document.getElementById('datePicker').value || new Date().toISOString().slice(0,10);
-  document.getElementById('w-tmax').innerHTML = '<span class="spinner"></span>';
-  document.getElementById('w-tmin').textContent = '—';
-  document.getElementById('w-ddc').textContent = '—';
-
-  try {
-    const start = BIOFIX[currentCulture];
-    const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${LAT}&longitude=${LON}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,relative_humidity_2m_mean,precipitation_hours&start_date=${start}&end_date=${selDate}&timezone=Africa/Casablanca`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const d = await res.json();
-
-    const tmaxs = d.daily.temperature_2m_max;
-    const tmins = d.daily.temperature_2m_min;
-    const precs = d.daily.precipitation_sum || [];
-    const hrs   = d.daily.relative_humidity_2m_mean || [];
-    const n = tmaxs.length;
-
-    ddCumul = 0;
-    for (let i = 0; i < n; i++) ddCumul += Math.max(0, (tmaxs[i] + tmins[i]) / 2 - 10);
-
-    const tmax = tmaxs[n-1], tmin = tmins[n-1];
-    const tmoy = ((tmax+tmin)/2).toFixed(1);
-    const ddJ  = Math.max(0, (tmax+tmin)/2 - 10).toFixed(1);
-    const bioDate = new Date(BIOFIX[currentCulture]);
-    const jours   = Math.round((new Date(selDate) - bioDate) / 86400000) + 1;
-
-    set('w-tmax', tmax.toFixed(1) + '°');
-    set('w-tmin', tmin.toFixed(1) + '°');
-    set('w-tmoy', tmoy + '°');
-    set('w-hr',   hrs[n-1] ? Math.round(hrs[n-1]) + '%' : '—');
-    set('w-pluie',precs[n-1] != null ? precs[n-1].toFixed(1) : '—');
-    set('w-ddj',  ddJ);
-    set('w-ddc',  ddCumul.toFixed(1));
-    set('w-jours',jours);
-    set('w-source','Open-Meteo · ' + selDate);
-    set('tp-tmax', tmax.toFixed(1) + '°');
-    set('tp-dd',   ddCumul.toFixed(0));
-
-    updateDDbars(parseFloat(ddCumul.toFixed(1)));
-
-  } catch(e) {
-    console.error(e);
-    set('w-tmax', '—');
-    set('w-source', '❌ ' + e.message);
-    toast('Erreur météo : ' + e.message, 'error');
-  }
-}
-
-function set(id, val) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = val;
-}
-
-// ── DD BAR UPDATE ──
-function updateDDbars(dd) {
-  // Acariens: 562/1124/1686
-  updateBar('safe-dd', dd, [562, 1124, 1686], ['var(--green-light)','var(--yellow)','var(--red)']);
-  // Thrips: 125/250/375
-  updateBar('warn-dd', dd, [125, 250, 375], ['var(--yellow)','var(--orange)','var(--red)']);
-  // Ceratitis: 373/746/1119
-  updateBar('danger-dd', dd, [373, 746, 1119], ['var(--orange)','var(--red)','var(--red)']);
-}
-
-function updateBar(pfx, dd, seuils, colors) {
-  const maxDD = seuils[seuils.length - 1];
-  const pct   = Math.min(100, (dd / maxDD) * 100);
-  const fill  = document.getElementById(pfx + '-fill');
-  if (fill) fill.style.width = pct.toFixed(1) + '%';
-  set(pfx + '-val', dd.toFixed(0) + ' DD');
-
-  const chipsEl = document.getElementById(pfx + '-chips');
-  if (!chipsEl) return;
-  const labels = ['G1','G2','G3'];
-  chipsEl.innerHTML = seuils.map((s, i) => {
-    const reached = dd >= s;
-    const color   = reached ? colors[i] : 'var(--text-muted)';
-    const bg      = reached ? colors[i] + '18' : 'var(--surface-2)';
-    return `<span class="dd-chip${reached?' reached':''}" style="color:${color};border-color:${reached?colors[i]:'var(--border)'};background:${bg}">${labels[i]}: ${s} DD ${reached?'✓':''}</span>`;
-  }).join('');
-}
-
-// ── NOTION CONNECTION ──
-async function initNotion() {
-  const dot  = document.getElementById('notion-dot');
-  const txt  = document.getElementById('notion-status-text');
-  const badge= document.getElementById('notion-topbadge');
-
-  // Check si les DB IDs sont configurés
-  const hasConfig = Object.values(NOTION_CONFIG.db).some(v => v.length > 0);
-  if (!hasConfig) {
-    dot.className   = 'notion-dot';
-    txt.textContent = 'Notion : IDs manquants';
-    badge.className = 'notion-badge err';
-    badge.textContent = '⚠️ Config requise';
-    renderNotionPlaceholder();
-    return;
-  }
-
-  try {
-    // Ping cultures DB
-    const res = await fetch(`${NOTION_CONFIG.apiBase}/databases/${NOTION_CONFIG.db.cultures}/query`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ page_size: 20 })
-    });
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    dot.className = 'notion-dot connected';
-    txt.textContent = 'Notion : connecté ✓';
-    badge.className = 'notion-badge ok';
-    badge.textContent = '✅ Notion live';
-    toast('Notion connecté', '');
-    renderNotionCultures(data.results);
-
-  } catch(e) {
-    dot.className = 'notion-dot error';
-    txt.textContent = 'Notion : erreur';
-    badge.className = 'notion-badge err';
-    badge.textContent = '❌ Notion offline';
-    console.error('Notion error:', e);
-    renderNotionPlaceholder();
-  }
-}
-
-function renderNotionCultures(pages) {
-  const grid = document.getElementById('notion-cultures-grid');
-  if (!pages || pages.length === 0) {
-    grid.innerHTML = '<p style="color:var(--text-muted);font-size:var(--fz-sm)">Aucune culture dans la base Notion.</p>';
-    return;
-  }
-  grid.innerHTML = pages.map(p => {
-    const props = p.properties;
-    const nom   = props?.Nom?.title?.[0]?.plain_text || props?.Name?.title?.[0]?.plain_text || 'Sans nom';
-    const type  = props?.Type?.select?.name || '—';
-    const zone  = props?.Zone?.rich_text?.[0]?.plain_text || '—';
-    return `<div class="card card-safe" style="cursor:default">
-      <div class="card-header">
-        <div class="card-icon" style="background:var(--green-pale);font-size:24px">🌳</div>
-        <div class="card-meta">
-          <div class="card-title">${nom}</div>
-          <div class="card-sub">${type}</div>
-        </div>
-        <span class="badge badge-info">Notion</span>
-      </div>
-      <div class="card-body">
-        <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:var(--fz-sm)">
-          <span style="color:var(--text-muted)">Zone</span><span style="font-weight:600">${zone}</span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function renderNotionPlaceholder() {
-  const grid = document.getElementById('notion-cultures-grid');
-  grid.innerHTML = `
-    <div style="grid-column:1/-1;background:var(--surface);border-radius:var(--radius-lg);padding:28px;border:1.5px dashed var(--border);text-align:center">
-      <div style="font-size:32px;margin-bottom:10px">🔗</div>
-      <div style="font-family:var(--font-heading);font-size:var(--fz-md);font-weight:700;color:var(--green);margin-bottom:6px">Connexion Notion requise</div>
-      <div style="font-size:var(--fz-sm);color:var(--text-muted);max-width:400px;margin:0 auto 14px">
-        Renseigner les IDs des bases de données Notion dans <code style="background:var(--surface-2);padding:2px 6px;border-radius:4px">NOTION_CONFIG.db</code>
-      </div>
-      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
-        <span class="badge badge-neutral">🌳 Cultures</span>
-        <span class="badge badge-neutral">🦟 Ravageurs</span>
-        <span class="badge badge-neutral">🌡️ Météo Log</span>
-        <span class="badge badge-neutral">💊 ONSSA</span>
-        <span class="badge badge-neutral">📧 Alertes</span>
-      </div>
-    </div>`;
-}
-
-// ── INIT ──
-const today = new Date().toISOString().slice(0, 10);
-document.getElementById('datePicker').value = today;
-document.getElementById('datePicker').max   = today;
-
-loadWeather();
-initNotion();
-
-</script>
+</div>
+<script>lucide.createIcons();</script>
 </body>
 </html>
